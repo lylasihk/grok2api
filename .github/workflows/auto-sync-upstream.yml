@@ -1,0 +1,18 @@
+name: Auto Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 1 * * *'      # 每天北京时间约 9:00 执行（UTC 时间，可自行调整）
+  workflow_dispatch:         # 支持手动触发测试
+
+permissions:
+  contents: write            # 必须授予 push 权限
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync fork with upstream
+        run: gh repo sync ${{ github.repository }} --branch main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
